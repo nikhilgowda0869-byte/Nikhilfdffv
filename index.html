@@ -1,1 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>Enri Madam 🤍</title>
+
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    color:#fff;
+    font-family:Arial,sans-serif;
+}
+
+
+/* =========================
+   APP
+========================= */
+
+.app{
+    width:100%;
+    height:100dvh;
+    position:relative;
+    overflow:hidden;
+    background:#000;
+}
+
+
+/* =========================
+   SLIDES
+========================= */
+
+.slide{
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:opacity .7s ease;
+}
+
+.slide.active{
+    opacity:1;
+    visibility:visible;
+}
+
+
+/* =========================
+   IMAGE
+   NO TEXT ON IMAGE
+========================= */
+
+.photo{
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+
+    background:#000;
+}
+
+
+/* =========================
+   SUBTLE DARK AREA
+   ONLY BEHIND BUTTON
+========================= */
+
+.slide::after{
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:180px;
+
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,.55),
+        rgba(0,0,0,0)
+    );
+
+    pointer-events:none;
+}
+
+
+/* =========================
+   BUTTON POSITION
+========================= */
+
+.content{
+    position:absolute;
+
+    z-index:10;
+
+    left:0;
+    right:0;
+
+    bottom:calc(
+        30px + env(safe-area-inset-bottom)
+    );
+
+    padding:20px;
+
+    text-align:center;
+}
+
+
+/* =========================
+   MAIN BUTTON
+========================= */
+
+.next{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    min-height:52px;
+
+    max-width:92%;
+
+    padding:14px 24px;
+
+    border-radius:30px;
+
+    border:
+        1px solid rgba(255,255,255,.5);
+
+    background:
+        rgba(0,0,0,.48);
+
+    color:#fff;
+
+    font-size:15px;
+
+    line-height:1.35;
+
+    backdrop-filter:blur(12px);
+
+    -webkit-backdrop-filter:blur(12px);
+
+    cursor:pointer;
+
+    box-shadow:
+        0 5px 25px rgba(0,0,0,.3);
+}
+
+.next:active{
+    transform:scale(.96);
+}
+
+
+/* =========================
+   RESPONSE POPUP
+========================= */
+
+.popup{
+    position:fixed;
+
+    inset:0;
+
+    z-index:100;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:25px;
+
+    background:
+        rgba(0,0,0,.72);
+
+    backdrop-filter:blur(8px);
+
+    -webkit-backdrop-filter:blur(8px);
+}
+
+.popup.show{
+    display:flex;
+}
+
+
+.popup-box{
+    width:100%;
+
+    max-width:400px;
+
+    padding:
+        28px 22px 24px;
+
+    border-radius:24px;
+
+    background:
+        rgba(24,24,28,.97);
+
+    border:
+        1px solid rgba(255,255,255,.2);
+
+    text-align:center;
+
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.55);
+}
+
+
+.popup-box h2{
+    font-family:Georgia,serif;
+
+    font-size:29px;
+
+    font-weight:400;
+
+    line-height:1.2;
+
+    margin-bottom:18px;
+}
+
+
+textarea{
+    width:100%;
+
+    height:140px;
+
+    resize:none;
+
+    border-radius:16px;
+
+    border:
+        1px solid rgba(255,255,255,.2);
+
+    background:
+        rgba(255,255,255,.06);
+
+    color:#fff;
+
+    padding:15px;
+
+    font-size:14px;
+
+    font-family:Arial,sans-serif;
+
+    outline:none;
+}
+
+
+textarea::placeholder{
+    color:
+        rgba(255,255,255,.45);
+}
+
+
+/* =========================
+   POPUP BUTTONS
+========================= */
+
+.buttons{
+    display:flex;
+
+    gap:10px;
+
+    margin-top:12px;
+}
+
+
+.popup-btn{
+    flex:1;
+
+    min-height:48px;
+
+    border-radius:14px;
+
+    border:
+        1px solid rgba(255,255,255,.2);
+
+    background:
+        rgba(255,255,255,.08);
+
+    color:#fff;
+
+    font-size:14px;
+
+    cursor:pointer;
+}
+
+
+.send{
+    background:
+        rgba(255,255,255,.18);
+}
+
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:700px){
+
+    .app{
+
+        max-width:480px;
+
+        margin:auto;
+
+        box-shadow:
+            0 0 70px #000;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     MUSIC
+========================= -->
+
+<audio
+    id="bgMusic"
+    src="videoplayback (1).webm"
+    loop
+    preload="auto"
+></audio>
+
+
+
+<!-- =========================
+     MAIN APP
+========================= -->
+
+<div class="app">
+
+
+    <!-- =====================
+         SLIDE 1
+    ====================== -->
+
+    <section class="slide active">
+
+        <img
+            src="moment1.jpg"
+            class="photo"
+            alt=""
+        >
+
+        <div class="content">
+
+            <button class="next">
+
+                Enri Madam →
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================
+         SLIDE 2
+    ====================== -->
+
+    <section class="slide">
+
+        <img
+            src="moment2.jpg"
+            class="photo"
+            alt=""
+        >
+
+        <div class="content">
+
+            <button class="next">
+
+                Coffee madi kodthira? ☕🤍
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================
+         SLIDE 3
+    ====================== -->
+
+    <section class="slide">
+
+        <img
+            src="moment3.jpg"
+            class="photo"
+            alt=""
+        >
+
+        <div class="content">
+
+            <button class="next">
+
+                Nan only expectation…
+                just be genuine. 🤍
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================
+         SLIDE 4
+    ====================== -->
+
+    <section class="slide">
+
+        <img
+            src="moment4.jpg"
+            class="photo"
+            alt=""
+        >
+
+        <div class="content">
+
+            <button class="next">
+
+                Tap to continue →
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================
+         FINAL SLIDE
+    ====================== -->
+
+    <section class="slide">
+
+        <img
+            src="rain.jpg"
+            class="photo"
+            alt=""
+        >
+
+        <div class="content">
+
+            <button
+                class="next"
+                id="lifetimeButton"
+            >
+
+                Nan jothe walk madthira…
+                lifetime? 🤍
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+
+<!-- =========================
+     RESPONSE POPUP
+========================= -->
+
+<div
+    class="popup"
+    id="popup"
+>
+
+    <div class="popup-box">
+
+
+        <h2>
+
+            Nimge en anstho… 🤍
+
+        </h2>
+
+
+
+        <form
+            id="responseForm"
+            action="https://formsubmit.co/nikhilgowda0869@gmail.com"
+            method="POST"
+        >
+
+
+            <input
+                type="hidden"
+                name="_subject"
+                value="A response from your Enri Madam page 🤍"
+            >
+
+
+            <input
+                type="hidden"
+                name="_captcha"
+                value="false"
+            >
+
+
+            <input
+                type="hidden"
+                name="_template"
+                value="table"
+            >
+
+
+            <input
+                type="hidden"
+                name="_next"
+                value="https://nikhilgowda0869-byte.github.io/Nikhlddf/"
+            >
+
+
+            <textarea
+                name="message"
+                required
+                placeholder="Mansinda bari… 🤍"
+            ></textarea>
+
+
+
+            <div class="buttons">
+
+
+                <button
+                    type="button"
+                    class="popup-btn"
+                    id="back"
+                >
+
+                    Back
+
+                </button>
+
+
+
+                <button
+                    type="submit"
+                    class="popup-btn send"
+                >
+
+                    Send 🤍
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const slides =
+    document.querySelectorAll(".slide");
+
+const nextButtons =
+    document.querySelectorAll(".next");
+
+const popup =
+    document.getElementById("popup");
+
+const lifetimeButton =
+    document.getElementById("lifetimeButton");
+
+const back =
+    document.getElementById("back");
+
+const bgMusic =
+    document.getElementById("bgMusic");
+
+
+let current = 0;
+
+
+/* =========================
+   MUSIC
+========================= */
+
+/*
+   Try to start music when
+   the page opens.
+*/
+
+bgMusic.volume = 0.7;
+
+bgMusic.play().catch(
+    () => {
+
+        /*
+           If the browser blocks
+           autoplay, the first tap
+           will start the music.
+        */
+
+    }
+);
+
+
+/*
+   Mobile-browser fallback.
+
+   Music starts on the first
+   interaction if autoplay was
+   blocked.
+*/
+
+function startMusic(){
+
+    if(bgMusic.paused){
+
+        bgMusic.play().catch(
+            () => {}
+        );
+
+    }
+
+}
+
+
+document.addEventListener(
+    "click",
+    startMusic,
+    { once:true }
+);
+
+
+/* =========================
+   CHANGE SLIDE
+========================= */
+
+function updateSlide(){
+
+    slides.forEach(
+        (slide,index) => {
+
+            slide.classList.toggle(
+                "active",
+                index === current
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   BUTTON ACTIONS
+========================= */
+
+nextButtons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+
+                /*
+                   Keep music playing.
+                */
+
+                startMusic();
+
+
+
+                /*
+                   FINAL QUESTION
+                */
+
+                if(
+                    button === lifetimeButton
+                ){
+
+                    popup.classList.add(
+                        "show"
+                    );
+
+                    return;
+
+                }
+
+
+
+                /*
+                   MOVE TO NEXT IMAGE
+                */
+
+                if(
+                    current <
+                    slides.length - 1
+                ){
+
+                    current++;
+
+                    updateSlide();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================
+   CLOSE POPUP
+========================= */
+
+back.addEventListener(
+    "click",
+    () => {
+
+        popup.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+/* =========================
+   INITIAL SLIDE
+========================= */
+
+updateSlide();
+
+</script>
+
+
+</body>
+
+</html>
+
+What changed
+
+- No one-time lock — she can open the link repeatedly.
+- No "localStorage".
+- No “Ee thara moments…” screen.
+- Music loops continuously using "videoplayback (1).webm".
+- No text directly on any image.
+- No top progress/flat line.
+- Messages appear only inside the buttons.
+- Final rain image opens the response box.
+- Her response still goes to your email.
+
+So now if she says “again send me this”, you can simply send the same link. 😄
